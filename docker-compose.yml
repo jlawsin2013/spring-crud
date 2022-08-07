@@ -14,5 +14,7 @@ services:
       - spring.data.mongodb.host=db
       - spring.data.mongodb.port=27017
       - spring.data.mongodb.database=crud
+      - spring.data.mongodb.auto-index-creation=true
+      - server.contextPath=/api/v1
     depends_on:
       - db
