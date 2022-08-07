@@ -2,13 +2,13 @@
 Quick Start for Springboot using mongodb without authentication
 
 **Steps & Commands**
-[x] Clone this repository to your local machine.
-[x] Make sure you have docker installed in your local machine. To verify, execute **`docker -version`**
-[x] Execute `**docker-compose up`**
+- [x] Clone this repository to your local machine.
+- [x] Make sure you have docker installed in your local machine. To verify, execute **`docker -version`**
+- [x] Execute `**docker-compose up`**
 
 
 **To test the API**
-[x] Install postman or just simply type this command:
+- [x] Install postman or just simply type this command:
 
 - To fetch all users
 ```bash
