@@ -18,7 +18,7 @@ import lombok.Data;
 public class Users {
 
 	@Id
-	private String id;
+	private String id = UUID.randomUUID().toString(); 
 	@Indexed
 	private String fname;
 	private String lname;
@@ -27,16 +27,6 @@ public class Users {
 	private LocalDateTime createdAt;
 	@LastModifiedDate
 	private LocalDateTime modifiedAt;
-	
-	public Users() {
-		
-	}
-	
-	public Users(String fname, String lname) {
-		this.id = UUID.randomUUID().toString();
-		this.fname = fname;
-		this.lname = lname;
-	}
 
 	public String getId() {
 		return id;
