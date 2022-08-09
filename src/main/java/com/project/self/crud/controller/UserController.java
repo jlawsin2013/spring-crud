@@ -2,13 +2,17 @@ package com.project.self.crud.controller;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +45,8 @@ public class UserController {
 	
 	@PatchMapping("/users/{id}")
 	public ResponseEntity<String> updateUser(@PathVariable("id") String id, @RequestBody final Users user) throws Exception {
+		Map<Object, Object> updatePredicates = new HashMap<Object, Object>();
+		
 		for (final Field field : Users.class.getDeclaredFields()) {
 			final String fieldNm = field.getName();
 			
@@ -50,10 +56,18 @@ public class UserController {
 			final Object fieldValue = getter.invoke(user);
 			
 			if (Objects.nonNull(fieldValue)) {
-				service.update(id, fieldNm, fieldValue);
+				updatePredicates.put(fieldNm, fieldValue);
 			}
 		}
-
-		return new ResponseEntity<>("User updated successfully", HttpStatus.OK);
+		
+		String updatedUser = service.update(id, updatePredicates);
+		
+		return new ResponseEntity<>("User updated successfully: " + updatedUser, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/users/{id}")
+	public ResponseEntity<Void> deleteUserById(@PathVariable("id") String id){
+		service.deleteUser(id);
+		return ResponseEntity.noContent().build();
 	}
 }
