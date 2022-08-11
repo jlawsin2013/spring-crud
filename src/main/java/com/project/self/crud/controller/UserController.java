@@ -2,7 +2,6 @@ package com.project.self.crud.controller;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,13 +37,13 @@ public class UserController {
 		return new ResponseEntity<>(service.getAllUsers(), HttpStatus.OK);
 	}
 	
-	@GetMapping("/users/{lname}")
-	public ResponseEntity<List<Users>> getUsersByLname(@PathVariable("lname") String lname){
-		return new ResponseEntity<>(service.getUsersByLname(lname), HttpStatus.OK);
+	@GetMapping("/users/{id}")
+	public ResponseEntity<Users> getUsersByLname(@PathVariable("id") String id){
+		return new ResponseEntity<>(service.getUsersById(id), HttpStatus.OK);
 	}
 	
 	@PatchMapping("/users/{id}")
-	public ResponseEntity<String> updateUser(@PathVariable("id") String id, @RequestBody final Users user) throws Exception {
+	public ResponseEntity<Void> updateUser(@PathVariable("id") String id, @RequestBody final Users user) throws Exception {
 		Map<Object, Object> updatePredicates = new HashMap<Object, Object>();
 		
 		for (final Field field : Users.class.getDeclaredFields()) {
@@ -60,9 +59,8 @@ public class UserController {
 			}
 		}
 		
-		String updatedUser = service.update(id, updatePredicates);
-		
-		return new ResponseEntity<>("User updated successfully: " + updatedUser, HttpStatus.OK);
+		service.update(id, updatePredicates);
+		return ResponseEntity.ok().build();
 	}
 	
 	@DeleteMapping("/users/{id}")

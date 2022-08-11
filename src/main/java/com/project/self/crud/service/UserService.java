@@ -8,7 +8,7 @@ import com.project.self.crud.model.Users;
 public interface UserService {
 	public String save(Users user);
 	public List<Users> getAllUsers();
-	public List<Users> getUsersByLname(String lname);
-	public String update(String id, Map<Object, Object> predicates);
+	public Users getUsersById(String id);
+	public void update(String id, Map<Object, Object> predicates);
 	public void deleteUser(String id);
 }

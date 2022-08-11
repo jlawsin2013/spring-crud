@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import com.project.self.crud.exception.UserNotFoundException;
 import com.project.self.crud.model.Users;
 import com.project.self.crud.repository.UsersRepository;
 
@@ -32,22 +33,30 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<Users> getUsersByLname(String lname) {
-		return repository.findByLnameStartsWith(lname);
+	public Users getUsersById(String id) {
+		return repository.findById(id).orElseThrow(()-> new UserNotFoundException(id));
 	}
 	
 	@Override
 	public void deleteUser(String id) {
-		repository.deleteById(id);
+		Users user = repository.findById(id).orElseThrow(()-> new UserNotFoundException(id));
+		
+		if (user.getId().equals(id)) {
+			repository.deleteById(id);
+		}
 	}
 
 	@Override
-	public String update(String id, Map<Object, Object> updatePredicates) {
-		Update update = new Update();
-		for (Map.Entry<Object, Object> entry : updatePredicates.entrySet()) {
-			update.set(entry.getKey().toString(), entry.getValue());
-		}
+	public void update(String id, Map<Object, Object> updatePredicates) {
+		Users user = repository.findById(id).orElseThrow(()-> new UserNotFoundException(id));
 		
-		return template.findAndModify(BasicQuery.query(Criteria.where("id").is(id)), update, Users.class).getId();
+		if (user.getId().equals(id)) {
+			Update update = new Update();
+			for (Map.Entry<Object, Object> entry : updatePredicates.entrySet()) {
+				update.set(entry.getKey().toString(), entry.getValue());
+			}
+			
+			template.findAndModify(BasicQuery.query(Criteria.where("id").is(id)), update, Users.class);
+		}
 	}
 }
