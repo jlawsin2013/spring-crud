@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.self.crud.dto.UserCreateDto;
+import com.project.self.crud.dto.UserRecordDto;
 import com.project.self.crud.model.Users;
 import com.project.self.crud.service.UserServiceImpl;
 
@@ -28,22 +32,22 @@ public class UserController {
 	private UserServiceImpl service;
 	
 	@PostMapping("/users")
-	public ResponseEntity<String> saveUser(@RequestBody Users user){
+	public ResponseEntity<String> saveUser(@RequestBody @Valid UserCreateDto user){
 		return new ResponseEntity<>("A new user is created successfully: "+ service.save(user), HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/users")
-	public ResponseEntity<List<Users>> getUsers(){
+	public ResponseEntity<List<UserRecordDto>> getUsers(){
 		return new ResponseEntity<>(service.getAllUsers(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/users/{id}")
-	public ResponseEntity<Users> getUsersByLname(@PathVariable("id") String id){
+	public ResponseEntity<UserRecordDto> getUsersByLname(@PathVariable("id") String id){
 		return new ResponseEntity<>(service.getUsersById(id), HttpStatus.OK);
 	}
 	
 	@PatchMapping("/users/{id}")
-	public ResponseEntity<Void> updateUser(@PathVariable("id") String id, @RequestBody final Users user) throws Exception {
+	public ResponseEntity<Void> updateUser(@PathVariable("id") String id, @RequestBody final UserCreateDto user) throws Exception {
 		Map<Object, Object> updatePredicates = new HashMap<Object, Object>();
 		
 		for (final Field field : Users.class.getDeclaredFields()) {

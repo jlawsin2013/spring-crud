@@ -10,11 +10,5 @@ services:
     container_name: "spring-app"
     ports:
       - "8080:8080"
-    environment:
-      - spring.data.mongodb.host=db
-      - spring.data.mongodb.port=27017
-      - spring.data.mongodb.database=crud
-      - spring.data.mongodb.auto-index-creation=true
-      - server.servlet.contextPath=/api/v1
     depends_on:
       - db

@@ -12,7 +12,7 @@ Quick Start for Springboot using mongodb without authentication
 
 - To fetch all users
 ```bash
-curl --location --request POST 'http://localhost:8080/api/v1/users'
+curl --location --request GET 'http://localhost:8080/api/v1/users'
 ```
 
 - To add user
@@ -20,8 +20,8 @@ curl --location --request POST 'http://localhost:8080/api/v1/users'
 curl --location --request POST 'http://localhost:8080/api/v1/users' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "id":1,
-    "fname":"John",
-    "lname":"Lawsin"
+    "fname": "John",
+    "lname": "Lawsin",
+    "address": "PH"
 }'
 ```
