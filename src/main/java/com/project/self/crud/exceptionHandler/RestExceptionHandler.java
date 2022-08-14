@@ -7,7 +7,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,8 +17,12 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.project.self.crud.apierror.ApiErrorResponse;
+import com.project.self.crud.apierror.ErrorResponse;
+import com.project.self.crud.apierror.SubError;
 import com.project.self.crud.exception.UserNotFoundException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -33,7 +39,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMissingPathVariable(
     		MissingPathVariableException ex, HttpHeaders headers,
             HttpStatus status, WebRequest request) {
-        ApiErrorResponse error = new ApiErrorResponse(
+		ErrorResponse error = new ErrorResponse(
                 currentApiVersion,
                 BAD_REQUEST,
                 ex.getParameter() + " path variable is missing",
@@ -46,7 +52,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {
-		ApiErrorResponse error = new ApiErrorResponse(
+		ErrorResponse error = new ErrorResponse(
                 currentApiVersion,
                 NOT_FOUND,
                 "Sorry, this URL does not exist or is no longer available",
@@ -59,7 +65,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		ApiErrorResponse error = new ApiErrorResponse(
+		ErrorResponse error = new ErrorResponse(
                 currentApiVersion,
                 BAD_REQUEST,
                 "Malformed JSON in request body",
@@ -72,7 +78,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		ApiErrorResponse error = new ApiErrorResponse(
+		ErrorResponse error = new ErrorResponse(
                 currentApiVersion,
                 METHOD_NOT_ALLOWED,
                 "The HTTP method in the request is not allowed on the resource",
@@ -82,9 +88,32 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<Object>(error, METHOD_NOT_ALLOWED);
 	}
 
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		ErrorResponse error = new ErrorResponse(
+                currentApiVersion,
+                BAD_REQUEST,
+                "Sorry, can't proceed processing the information provided. Please check your inputs again",
+                ex.getClass().getSimpleName(),
+                mapToSubError(ex)
+        );
+		
+		return new ResponseEntity<Object>(error, BAD_REQUEST);
+	}
+	
+	private List<SubError> mapToSubError(MethodArgumentNotValidException ex) {
+		List<SubError> validationError = new ArrayList<SubError>();
+		for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
+			validationError.add(new SubError(fieldError.getObjectName(), fieldError.getField(), fieldError.getRejectedValue(), fieldError.getDefaultMessage()));
+	    }
+		
+		return validationError;
+    }
+
 	@ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Object> handleNonExistingUser(UserNotFoundException ex, WebRequest request) {
-        ApiErrorResponse error = new ApiErrorResponse(
+		ErrorResponse error = new ErrorResponse(
                 currentApiVersion,
                 NOT_FOUND,
                 ex.getMessage(),

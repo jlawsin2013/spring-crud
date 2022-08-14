@@ -4,13 +4,11 @@ COPY pom.xml /build/
 COPY src /build/src/
 
 WORKDIR /build/
-RUN mvn dependency:resolve
 RUN mvn clean package -DskipTests
 
 FROM openjdk:8-jre-alpine
 
 WORKDIR /app
-
 COPY --from=MAVEN_BUILD /build/target/springboot-mongo-docker.jar /app/
 
 ENTRYPOINT ["java", "-jar", "springboot-mongo-docker.jar"]
