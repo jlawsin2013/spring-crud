@@ -1,7 +1,5 @@
 package com.project.self.crud.dto;
 
-import java.time.LocalDateTime;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -16,7 +14,7 @@ public class UserCreateDto {
 	@NotNull(message = "Address is required")
 	private String address;
 
-	public UserCreateDto(String id, String fname, String lname, String address) {
+	public UserCreateDto(String fname, String lname, String address) {
 		this.fname = fname;
 		this.lname = lname;
 		this.address = address;

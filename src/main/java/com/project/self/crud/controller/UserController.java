@@ -42,7 +42,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/users/{id}")
-	public ResponseEntity<UserRecordDto> getUsersByLname(@PathVariable("id") String id){
+	public ResponseEntity<UserRecordDto> getUsersById(@PathVariable("id") String id){
 		return new ResponseEntity<>(service.getUsersById(id), HttpStatus.OK);
 	}
 	
