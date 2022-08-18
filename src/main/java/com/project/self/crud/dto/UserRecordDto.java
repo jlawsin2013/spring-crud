@@ -2,23 +2,20 @@ package com.project.self.crud.dto;
 
 import java.time.LocalDateTime;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 public class UserRecordDto {
 
 	private String id;
 	private String fname;
 	private String lname;
 	private String address;
-	private LocalDateTime createdAt;
-	private LocalDateTime modifiedAt;
+	private String createdAt;
+	private String modifiedAt;
 	
 	public UserRecordDto() {
 		
 	}
 
-	public UserRecordDto(String id, String fname, String lname, String address, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+	public UserRecordDto(String id, String fname, String lname, String address, String createdAt, String modifiedAt) {
 		this.id = id;
 		this.fname = fname;
 		this.lname = lname;
@@ -59,19 +56,19 @@ public class UserRecordDto {
 		this.address = address;
 	}
 	
-	public LocalDateTime getCreatedAt() {
+	public String getCreatedAt() {
 		return createdAt;
 	}
 	
-	public void setCreatedAt(LocalDateTime createdAt) {
+	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
 	}
 	
-	public LocalDateTime getModifiedAt() {
+	public String getModifiedAt() {
 		return modifiedAt;
 	}
 	
-	public void setModifiedAt(LocalDateTime modifiedAt) {
+	public void setModifiedAt(String modifiedAt) {
 		this.modifiedAt = modifiedAt;
 	}
 

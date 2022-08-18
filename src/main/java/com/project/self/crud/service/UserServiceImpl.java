@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<UserRecordDto> getAllUsers() {
-		List <UserRecordDto> userRecord = repository.findAll().stream().map(user -> new UserRecordDto(user.getId(), user.getFname(), user.getLname(), user.getAddress(), user.getCreatedAt(), user.getModifiedAt())).collect(Collectors.toList());
+		List <UserRecordDto> userRecord = repository.findAll().stream().map(user -> new UserRecordDto(user.getId(), user.getFname(), user.getLname(), user.getAddress(), user.getCreatedAt().toString(), user.getModifiedAt().toString())).collect(Collectors.toList());
 		return userRecord;
 	}
 
@@ -52,8 +52,8 @@ public class UserServiceImpl implements UserService {
 			userRecord.setFname(user.getFname());
 			userRecord.setLname(user.getLname());
 			userRecord.setAddress(user.getAddress());
-			userRecord.setCreatedAt(user.getCreatedAt());
-			userRecord.setModifiedAt(user.getModifiedAt());
+			userRecord.setCreatedAt(user.getCreatedAt().toString());
+			userRecord.setModifiedAt(user.getModifiedAt().toString());
 		}
 		
 		return userRecord;
