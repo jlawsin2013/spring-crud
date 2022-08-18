@@ -4,7 +4,7 @@ COPY pom.xml /build/
 COPY src /build/src/
 
 WORKDIR /build/
-RUN mvn clean package -DskipTests
+RUN mvn clean package
 
 FROM openjdk:8-jre-alpine
 
