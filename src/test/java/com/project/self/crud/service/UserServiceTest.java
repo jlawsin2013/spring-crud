@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +74,7 @@ public class UserServiceTest {
 	@Test
 	@DisplayName("Test getAllUsers Success")
 	void testGetAllUsers() {
-		List<Users> existingUser = List.of(user);
+		List<Users> existingUser = Arrays.asList(user);
 		when(repository.findAll()).thenReturn(existingUser);
 		List<UserRecordDto> userRecord = service.getAllUsers();
         Assertions.assertEquals(1, userRecord.size());

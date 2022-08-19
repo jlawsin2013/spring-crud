@@ -3,9 +3,9 @@ package com.project.self.crud.controller;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.Matchers.*;
 
-import java.util.HashMap;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -40,14 +40,15 @@ public class UserControllerTest {
 	
 	@BeforeEach
 	void init() {
-		userRecord = new UserRecordDto("1", "John", "Lawsin", "PH", "022-08-18T14:01:19.686+00:00", "022-08-18T14:01:19.686+00:00");
+		LocalDateTime now = LocalDateTime.now(); 
+		userRecord = new UserRecordDto("1", "John", "Lawsin", "PH", now, now);
 		userCreate = new UserCreateDto("John", "Lawsin", "PH");
 	}
 	
 	@Test
 	@DisplayName("GET /api/v1/users")
 	void testGetUsers() throws Exception {
-		List<UserRecordDto> users = List.of(userRecord);
+		List<UserRecordDto> users = Arrays.asList(userRecord);
 		when(service.getAllUsers()).thenReturn(users);
 		
 		mockMvc.perform(get("/users"))
