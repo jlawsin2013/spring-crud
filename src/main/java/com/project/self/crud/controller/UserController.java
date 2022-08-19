@@ -50,12 +50,12 @@ public class UserController {
 	public ResponseEntity<Void> updateUser(@PathVariable("id") String id, @RequestBody final UserCreateDto user) throws Exception {
 		Map<Object, Object> updatePredicates = new HashMap<Object, Object>();
 		
-		for (final Field field : Users.class.getDeclaredFields()) {
+		for (final Field field : UserCreateDto.class.getDeclaredFields()) {
 			final String fieldNm = field.getName();
 			
 			if (fieldNm == "id") continue;
 			
-			final Method getter = Users.class.getDeclaredMethod("get" + StringUtils.capitalize(fieldNm));
+			final Method getter = UserCreateDto.class.getDeclaredMethod("get" + StringUtils.capitalize(fieldNm));
 			final Object fieldValue = getter.invoke(user);
 			
 			if (Objects.nonNull(fieldValue)) {

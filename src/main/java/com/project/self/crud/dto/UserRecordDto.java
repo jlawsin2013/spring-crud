@@ -2,20 +2,24 @@ package com.project.self.crud.dto;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class UserRecordDto {
 
 	private String id;
 	private String fname;
 	private String lname;
 	private String address;
-	private String createdAt;
-	private String modifiedAt;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime createdAt;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime modifiedAt;
 	
 	public UserRecordDto() {
 		
 	}
 
-	public UserRecordDto(String id, String fname, String lname, String address, String createdAt, String modifiedAt) {
+	public UserRecordDto(String id, String fname, String lname, String address, LocalDateTime createdAt, LocalDateTime modifiedAt) {
 		this.id = id;
 		this.fname = fname;
 		this.lname = lname;
@@ -56,19 +60,19 @@ public class UserRecordDto {
 		this.address = address;
 	}
 	
-	public String getCreatedAt() {
+	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
 	
-	public void setCreatedAt(String createdAt) {
+	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 	
-	public String getModifiedAt() {
+	public LocalDateTime getModifiedAt() {
 		return modifiedAt;
 	}
 	
-	public void setModifiedAt(String modifiedAt) {
+	public void setModifiedAt(LocalDateTime modifiedAt) {
 		this.modifiedAt = modifiedAt;
 	}
 
