@@ -27,58 +27,35 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
     public String save(UserCreateDto userDto) {
-		Users userModel = new Users();
-		userModel.setFname(userDto.getFname());
-		userModel.setLname(userDto.getLname());
-		userModel.setAddress(userDto.getAddress());
-		
-        return repository.save(userModel).getId();
+        return repository.save(Users.builder().fname(userDto.getFname()).lname(userDto.getLname()).address(userDto.getAddress()).build()).getId();
     }
 
 	@Override
 	public List<UserRecordDto> getAllUsers() {
-		List <UserRecordDto> userRecord = repository.findAll().stream().map(user -> new UserRecordDto(user.getId(), user.getFname(), user.getLname(), user.getAddress(), user.getCreatedAt(), user.getModifiedAt())).collect(Collectors.toList());
+		List <UserRecordDto> userRecord = repository.findAll().stream().map(user -> UserRecordDto.builder().id(user.getId()).fname(user.getFname()).lname(user.getLname()).address(user.getAddress()).createdAt(user.getCreatedAt()).modifiedAt(user.getModifiedAt()).build()).collect(Collectors.toList());
 		return userRecord;
 	}
 
 	@Override
 	public UserRecordDto getUsersById(String id) {
 		Users user = repository.findById(id).orElseThrow(()-> new UserNotFoundException(id));
-		
-		UserRecordDto userRecord = new UserRecordDto();
-		
-		if (user != null) {
-			userRecord.setId(user.getId());
-			userRecord.setFname(user.getFname());
-			userRecord.setLname(user.getLname());
-			userRecord.setAddress(user.getAddress());
-			userRecord.setCreatedAt(user.getCreatedAt());
-			userRecord.setModifiedAt(user.getModifiedAt());
-		}
-		
-		return userRecord;
+		return UserRecordDto.builder().id(user.getId()).fname(user.getFname()).lname(user.getLname()).address(user.getAddress()).createdAt(user.getCreatedAt()).modifiedAt(user.getModifiedAt()).build();
 	}
 	
 	@Override
 	public void deleteUser(String id) {
 		Users user = repository.findById(id).orElseThrow(()-> new UserNotFoundException(id));
-		
-		if (user.getId().equals(id)) {
-			repository.deleteById(id);
-		}
+		repository.deleteById(user.getId());
 	}
 
 	@Override
 	public void update(String id, Map<Object, Object> updatePredicates) {
 		Users user = repository.findById(id).orElseThrow(()-> new UserNotFoundException(id));
-		
-		if (user.getId().equals(id)) {
-			Update update = new Update();
-			for (Map.Entry<Object, Object> entry : updatePredicates.entrySet()) {
-				update.set(entry.getKey().toString(), entry.getValue());
-			}
-			
-			template.findAndModify(BasicQuery.query(Criteria.where("id").is(id)), update, Users.class);
+		Update update = new Update();
+		for (Map.Entry<Object, Object> entry : updatePredicates.entrySet()) {
+			update.set(entry.getKey().toString(), entry.getValue());
 		}
+		
+		template.findAndModify(BasicQuery.query(Criteria.where("id").is(id)), update, Users.class);
 	}
 }

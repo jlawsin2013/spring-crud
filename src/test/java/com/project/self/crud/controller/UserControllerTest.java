@@ -4,6 +4,7 @@ import static org.mockito.Mockito.when;
 import static org.hamcrest.Matchers.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,14 +36,16 @@ public class UserControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 	
+	String dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+	
 	UserRecordDto userRecord;
 	UserCreateDto userCreate;
 	
 	@BeforeEach
 	void init() {
-		LocalDateTime now = LocalDateTime.now(); 
-		userRecord = new UserRecordDto("1", "John", "Lawsin", "PH", now, now);
-		userCreate = new UserCreateDto("John", "Lawsin", "PH");
+		LocalDateTime now = LocalDateTime.now();
+		userRecord = UserRecordDto.builder().id("1").fname("John").lname("Lawsin").address("PH").createdAt(now).modifiedAt(now).build();
+		userCreate = UserCreateDto.builder().fname("John").lname("Lawsin").address("PH").build();
 	}
 	
 	@Test
@@ -60,8 +63,8 @@ public class UserControllerTest {
         .andExpect(jsonPath("$[0].fname", is(userRecord.getFname())))
         .andExpect(jsonPath("$[0].lname", is(userRecord.getLname())))
         .andExpect(jsonPath("$[0].address", is(userRecord.getAddress())))
-        .andExpect(jsonPath("$[0].createdAt", is(userRecord.getCreatedAt())))
-        .andExpect(jsonPath("$[0].modifiedAt", is(userRecord.getModifiedAt())));
+        .andExpect(jsonPath("$[0].createdAt", is(userRecord.getCreatedAt().format(DateTimeFormatter.ofPattern(dateTimeFormat)))))
+        .andExpect(jsonPath("$[0].modifiedAt", is(userRecord.getModifiedAt().format(DateTimeFormatter.ofPattern(dateTimeFormat)))));
 	}
 	
 	@Test
@@ -77,8 +80,8 @@ public class UserControllerTest {
         .andExpect(jsonPath("$.fname", is(userRecord.getFname())))
         .andExpect(jsonPath("$.lname", is(userRecord.getLname())))
         .andExpect(jsonPath("$.address", is(userRecord.getAddress())))
-        .andExpect(jsonPath("$.createdAt", is(userRecord.getCreatedAt())))
-        .andExpect(jsonPath("$.modifiedAt", is(userRecord.getModifiedAt())));
+        .andExpect(jsonPath("$.createdAt", is(userRecord.getCreatedAt().format(DateTimeFormatter.ofPattern(dateTimeFormat)))))
+        .andExpect(jsonPath("$.modifiedAt", is(userRecord.getModifiedAt().format(DateTimeFormatter.ofPattern(dateTimeFormat)))));
 	}
 	
 	@Test
@@ -91,6 +94,6 @@ public class UserControllerTest {
 		.andExpect(content().encoding("UTF-8"))
 		.andExpect(content().contentType("text/plain;charset=UTF-8"))
 		// validate the returned fields
-		.andExpect(jsonPath("$", is("A new user is created successfully: null")));
+		.andExpect(jsonPath("$", is("A new user is created successfully: 1")));
 	}
 }

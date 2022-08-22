@@ -43,9 +43,9 @@ public class UserServiceTest {
 	@BeforeEach
 	void setup() {
 		LocalDateTime now = LocalDateTime.now(); 
+		user = Users.builder().id("1").fname("John").lname("Lawsin").address("PH").createdAt(now).modifiedAt(now).build();
+		userCreate = UserCreateDto.builder().fname("John").lname("Lawsin").address("PH").build();
 		expectedId = "1";
-		user = new Users("1", "John", "Lawsin", "PH", now, now);
-		userCreate = new UserCreateDto("John", "Lawsin", "PH");
 		
 		predicates = new HashMap<Object, Object>() {{
 		    put("fname", "Joshua");
