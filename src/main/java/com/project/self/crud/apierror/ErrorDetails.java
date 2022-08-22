@@ -6,6 +6,13 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
+@Builder
 public class ErrorDetails {
 	private HttpStatus statusCode;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
@@ -28,45 +35,4 @@ public class ErrorDetails {
         this.message = message;
         this.subErrors = subError;
     }
-
-	public HttpStatus getStatusCode() {
-		return statusCode;
-	}
-
-	public void setStatusCode(HttpStatus statusCode) {
-		this.statusCode = statusCode;
-	}
-
-	public LocalDateTime getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(LocalDateTime timestamp) {
-		this.timestamp = timestamp;
-	}
-
-	public String getReason() {
-		return reason;
-	}
-
-	public void setReason(String reason) {
-		this.reason = reason;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public List<SubError> getSubErrors() {
-		return subErrors;
-	}
-
-	public void setSubErrors(List<SubError> subErrors) {
-		this.subErrors = subErrors;
-	}
-    
 }

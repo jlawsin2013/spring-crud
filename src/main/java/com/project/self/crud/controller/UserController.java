@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.self.crud.dto.UserCreateDto;
 import com.project.self.crud.dto.UserRecordDto;
-import com.project.self.crud.model.Users;
 import com.project.self.crud.service.UserServiceImpl;
 
 @RestController
