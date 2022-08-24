@@ -9,6 +9,8 @@ import java.util.Objects;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +25,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.self.crud.dto.UserCreateDto;
 import com.project.self.crud.dto.UserRecordDto;
+import com.project.self.crud.exception.UserNotFoundException;
 import com.project.self.crud.service.UserServiceImpl;
 
 @RestController
 public class UserController {
+	Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	private UserServiceImpl service;
 	
@@ -41,8 +46,19 @@ public class UserController {
 	}
 	
 	@GetMapping("/users/{id}")
-	public ResponseEntity<UserRecordDto> getUsersById(@PathVariable("id") String id){
-		return new ResponseEntity<>(service.getUsersById(id), HttpStatus.OK);
+	public ResponseEntity<UserRecordDto> getUsersById(@PathVariable("id") String id) throws UserNotFoundException{
+		log.info("START: Entering fetch feature");
+		try {
+			UserRecordDto userRecord = service.getUsersById(id);
+			log.info("User found: " + userRecord.getId());
+			log.debug("User record: " + userRecord);
+			return new ResponseEntity<>(userRecord, HttpStatus.OK);
+		} catch (UserNotFoundException e) {
+			log.error(e.getMessage());
+			return ResponseEntity.notFound().build();
+		} finally {
+			log.info("END: Leaving fetch feature");
+		}
 	}
 	
 	@PatchMapping("/users/{id}")
