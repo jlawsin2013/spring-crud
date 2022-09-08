@@ -24,7 +24,6 @@ import com.project.self.crud.exception.UserNotFoundException;
 import com.project.self.crud.model.Users;
 import com.project.self.crud.repository.UsersRepository;
 
-
 @SpringBootTest
 public class UserServiceTest {
 	

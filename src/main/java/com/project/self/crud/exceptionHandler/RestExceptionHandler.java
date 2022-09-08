@@ -1,5 +1,7 @@
 package com.project.self.crud.exceptionHandler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -32,6 +34,8 @@ import static org.springframework.http.HttpStatus.METHOD_NOT_ALLOWED;;
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
+	Logger log = LoggerFactory.getLogger(this.getClass());
+
 	@Value("${api.version}")
 	private String currentApiVersion;
 	
@@ -39,6 +43,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMissingPathVariable(
     		MissingPathVariableException ex, HttpHeaders headers,
             HttpStatus status, WebRequest request) {
+		log.error(ex.getMessage());
+		
 		ErrorResponse error = new ErrorResponse(
                 currentApiVersion,
                 BAD_REQUEST,
@@ -52,6 +58,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {
+		log.error(ex.getMessage());
+		
 		ErrorResponse error = new ErrorResponse(
                 currentApiVersion,
                 NOT_FOUND,
@@ -65,6 +73,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		log.error(ex.getMessage());
+		
 		ErrorResponse error = new ErrorResponse(
                 currentApiVersion,
                 BAD_REQUEST,
@@ -78,6 +88,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		log.error(ex.getMessage());
+		
 		ErrorResponse error = new ErrorResponse(
                 currentApiVersion,
                 METHOD_NOT_ALLOWED,
@@ -91,6 +103,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		log.error(ex.getMessage());
+		
 		ErrorResponse error = new ErrorResponse(
                 currentApiVersion,
                 BAD_REQUEST,
@@ -113,6 +127,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Object> handleNonExistingUser(UserNotFoundException ex, WebRequest request) {
+		log.error(ex.getMessage());
+		
 		ErrorResponse error = new ErrorResponse(
                 currentApiVersion,
                 NOT_FOUND,

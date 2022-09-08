@@ -47,18 +47,10 @@ public class UserController {
 	
 	@GetMapping("/users/{id}")
 	public ResponseEntity<UserRecordDto> getUsersById(@PathVariable("id") String id) throws UserNotFoundException{
-		log.info("START: Entering fetch feature");
-		try {
-			UserRecordDto userRecord = service.getUsersById(id);
-			log.info("User found: " + userRecord.getId());
-			log.debug("User record: " + userRecord);
-			return new ResponseEntity<>(userRecord, HttpStatus.OK);
-		} catch (UserNotFoundException e) {
-			log.error(e.getMessage());
-			return ResponseEntity.notFound().build();
-		} finally {
-			log.info("END: Leaving fetch feature");
-		}
+		UserRecordDto userRecord = service.getUsersById(id);
+		log.info("User found: " + userRecord.getId());
+		log.debug("User record: " + userRecord);
+		return new ResponseEntity<>(userRecord, HttpStatus.OK);
 	}
 	
 	@PatchMapping("/users/{id}")
